@@ -13,8 +13,8 @@ interface ProductCardContainerProps {
   category: string;
 }
 const ProductCardContainer = ({ category }: ProductCardContainerProps) => {
-  const { pageNum } = useContext(ShopPageContext);
-  const { data, isLoading } = useProducts(category, pageNum);
+  const shopState = useContext(ShopPageContext);
+  const { data, isLoading } = useProducts({ category, ...shopState });
   const { data: categories } = useCategories();
 
   return (

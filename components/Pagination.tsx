@@ -1,7 +1,10 @@
 "use client";
 
 import { useContext } from "react";
-import { ShopPageContext } from "@/providers/ShopProvider";
+import {
+  ShopPageContext,
+  ShopPageDispatchContext,
+} from "@/providers/ShopProvider";
 
 import { Button } from "./ui/button";
 import { ChevronRightIcon, ChevronLeftIcon } from "@radix-ui/react-icons";
@@ -11,13 +14,20 @@ interface PaginationProps {
 }
 
 const Pagination = ({ pageCount }: PaginationProps) => {
-  const { pageNum, setPageNum } = useContext(ShopPageContext);
+  const pageNum = useContext(ShopPageContext)?.page;
+  const dispatch = useContext(ShopPageDispatchContext);
 
   const nextHandler = () => {
-    setPageNum((currentPageNum) => currentPageNum + 1);
+    dispatch({
+      type: "changePage",
+      page: pageNum + 1,
+    });
   };
   const previousHandler = () => {
-    setPageNum((currentPageNum) => currentPageNum - 1);
+    dispatch({
+      type: "changePage",
+      page: pageNum - 1,
+    });
   };
 
   return (

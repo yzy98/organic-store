@@ -1,5 +1,6 @@
 import Pagination from "@/components/Pagination";
 import ProductCardContainer from "@/components/ProductCardContainer";
+import ProductSortBar from "@/components/ProductSortBar";
 import prismadb from "@/lib/prismadb";
 import ShopProvider from "@/providers/ShopProvider";
 
@@ -43,6 +44,7 @@ const ShopPage = async ({ params }: ShopPageProps) => {
     <div className="flex flex-col gap-10 ml-5 h-[1200px] border-l border-gray-400 pl-[80px]">
       <ShopProvider>
         <div>{params.category}</div>
+        <ProductSortBar />
         <ProductCardContainer category={params.category} />
         <Pagination pageCount={pageCount} />
       </ShopProvider>

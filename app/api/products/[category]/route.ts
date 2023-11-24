@@ -16,12 +16,42 @@ export async function GET(
 
     const searchParams = req.nextUrl.searchParams;
     const pageNum = Number(searchParams.get("page"));
-    // one page display nine products
+    const sortStr = searchParams.get("sort");
+    const orderStr = searchParams.get("order");
 
     if (category === "everything") {
+      // sort by date
+      if (sortStr === "date") {
+        // sort all products
+        const products = await prismadb.product.findMany({
+          orderBy: {
+            createdAt: orderStr,
+          },
+        });
+        // pick 9 items according to pageNum
+        const sortedProducts = products.slice((pageNum - 1) * 9, pageNum * 9);
+        return NextResponse.json(sortedProducts);
+      }
+
+      // sort by price
+      if (sortStr === "price") {
+        // sort all products
+        // TODO: price is string, there is no api for natural sorting in prisma, use prisma.$queryRaw to write MongoDB query
+        const products = await prismadb.product.findMany({
+          orderBy: {
+            price: orderStr,
+          },
+        });
+        console.log("----product", products);
+        // pick 9 items according to pageNum
+        const sortedProducts = products.slice((pageNum - 1) * 9, pageNum * 9);
+        return NextResponse.json(sortedProducts);
+      }
+
+      // sort by default
       const allProducts = await prismadb.product.findMany({
         skip: (pageNum - 1) * 9,
-        take: 9,
+        take: 9, // one page display nine products
       });
       return NextResponse.json(allProducts);
     }
