@@ -27,25 +27,23 @@ export async function GET(
           orderBy: {
             createdAt: orderStr,
           },
+          skip: (pageNum - 1) * 9,
+          take: 9, // one page display nine products
         });
-        // pick 9 items according to pageNum
-        const sortedProducts = products.slice((pageNum - 1) * 9, pageNum * 9);
-        return NextResponse.json(sortedProducts);
+        return NextResponse.json(products);
       }
 
       // sort by price
       if (sortStr === "price") {
         // sort all products
-        // TODO: price is string, there is no api for natural sorting in prisma, use prisma.$queryRaw to write MongoDB query
         const products = await prismadb.product.findMany({
           orderBy: {
             price: orderStr,
           },
+          skip: (pageNum - 1) * 9,
+          take: 9, // one page display nine products
         });
-        console.log("----product", products);
-        // pick 9 items according to pageNum
-        const sortedProducts = products.slice((pageNum - 1) * 9, pageNum * 9);
-        return NextResponse.json(sortedProducts);
+        return NextResponse.json(products);
       }
 
       // sort by default
@@ -56,7 +54,7 @@ export async function GET(
       return NextResponse.json(allProducts);
     }
 
-    const categoryProducts = await prismadb.category.findUnique({
+    const currentCategory = await prismadb.category.findUnique({
       where: {
         name: category,
       },
@@ -65,9 +63,45 @@ export async function GET(
       },
     });
 
-    const products = categoryProducts?.products || [];
-    const displayProducts = products.slice((pageNum - 1) * 9, pageNum * 9);
-    return NextResponse.json(displayProducts);
+    if (sortStr === "date") {
+      const categoryProducts = await prismadb.product.findMany({
+        where: {
+          categoryId: currentCategory?.id,
+        },
+        skip: (pageNum - 1) * 9,
+        take: 9, // one page display nine products
+        orderBy: {
+          createdAt: orderStr,
+        },
+      });
+
+      return NextResponse.json(categoryProducts);
+    }
+
+    if (sortStr === "price") {
+      const categoryProducts = await prismadb.product.findMany({
+        where: {
+          categoryId: currentCategory?.id,
+        },
+        skip: (pageNum - 1) * 9,
+        take: 9, // one page display nine products
+        orderBy: {
+          price: orderStr,
+        },
+      });
+
+      return NextResponse.json(categoryProducts);
+    }
+
+    const categoryProducts = await prismadb.product.findMany({
+      where: {
+        categoryId: currentCategory?.id,
+      },
+      skip: (pageNum - 1) * 9,
+      take: 9, // one page display nine products
+    });
+
+    return NextResponse.json(categoryProducts);
   } catch (error) {
     return new NextResponse("Internal Error", { status: 500 });
   }

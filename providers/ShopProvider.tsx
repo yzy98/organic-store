@@ -30,6 +30,18 @@ const shopReducer = (stateObj: object, action: object) => {
         sort: action.order,
       };
     }
+    case "changeMinPrice": {
+      return {
+        ...stateObj,
+        sort: action.minPrice,
+      };
+    }
+    case "changeMaxPrice": {
+      return {
+        ...stateObj,
+        sort: action.maxPrice,
+      };
+    }
     default: {
       throw Error("未知 action: " + action.type);
     }
@@ -40,6 +52,8 @@ const initialState = {
   page: 1,
   sort: null,
   order: null,
+  minPrice: null,
+  maxPrice: null,
 };
 
 const ShopProvider: FC<ShopProviderProps> = ({ children }) => {
