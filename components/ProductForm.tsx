@@ -31,7 +31,7 @@ const categories: string[] = ["groceries", "juice"];
 
 const productFormSchema = z.object({
   title: z.string().min(1).max(20),
-  price: z.string().min(1).max(20),
+  price: z.number().int(),
   image: z.string().min(1),
   category: z.string().min(1).max(20),
   description: z.string().min(1).max(200),
@@ -43,7 +43,7 @@ const ProductForm = () => {
     resolver: zodResolver(productFormSchema),
     defaultValues: {
       title: "",
-      price: "",
+      price: 0,
       image: "",
       category: "",
       description: "",
@@ -111,7 +111,11 @@ const ProductForm = () => {
             <FormItem>
               <FormLabel>Price</FormLabel>
               <FormControl>
-                <Input disabled={isLoading} {...field} />
+                <Input
+                  disabled={isLoading}
+                  {...field}
+                  onChange={(event) => field.onChange(+event.target.value)}
+                />
               </FormControl>
             </FormItem>
           )}
