@@ -27,19 +27,14 @@ const shopReducer = (stateObj: object, action: object) => {
     case "changeOrder": {
       return {
         ...stateObj,
-        sort: action.order,
+        order: action.order,
       };
     }
-    case "changeMinPrice": {
+    case "changePrice": {
       return {
         ...stateObj,
-        sort: action.minPrice,
-      };
-    }
-    case "changeMaxPrice": {
-      return {
-        ...stateObj,
-        sort: action.maxPrice,
+        minPrice: action.minPrice,
+        maxPrice: action.maxPrice,
       };
     }
     default: {

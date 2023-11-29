@@ -18,6 +18,8 @@ export async function GET(
     const pageNum = Number(searchParams.get("page"));
     const sortStr = searchParams.get("sort");
     const orderStr = searchParams.get("order");
+    const minPriceStr = searchParams.get("min_price");
+    const maxPriceStr = searchParams.get("max_price");
 
     if (category === "everything") {
       // sort by date
@@ -26,6 +28,12 @@ export async function GET(
         const products = await prismadb.product.findMany({
           orderBy: {
             createdAt: orderStr,
+          },
+          where: {
+            price: {
+              gte: Number(minPriceStr || 0),
+              lte: Number(maxPriceStr || 10000),
+            },
           },
           skip: (pageNum - 1) * 9,
           take: 9, // one page display nine products
@@ -40,6 +48,12 @@ export async function GET(
           orderBy: {
             price: orderStr,
           },
+          where: {
+            price: {
+              gte: Number(minPriceStr || 0),
+              lte: Number(maxPriceStr || 10000),
+            },
+          },
           skip: (pageNum - 1) * 9,
           take: 9, // one page display nine products
         });
@@ -50,7 +64,14 @@ export async function GET(
       const allProducts = await prismadb.product.findMany({
         skip: (pageNum - 1) * 9,
         take: 9, // one page display nine products
+        where: {
+          price: {
+            gte: Number(minPriceStr || 0),
+            lte: Number(maxPriceStr || 10000),
+          },
+        },
       });
+
       return NextResponse.json(allProducts);
     }
 
@@ -67,6 +88,10 @@ export async function GET(
       const categoryProducts = await prismadb.product.findMany({
         where: {
           categoryId: currentCategory?.id,
+          price: {
+            gte: Number(minPriceStr || 0),
+            lte: Number(maxPriceStr || 10000),
+          },
         },
         skip: (pageNum - 1) * 9,
         take: 9, // one page display nine products
@@ -82,6 +107,10 @@ export async function GET(
       const categoryProducts = await prismadb.product.findMany({
         where: {
           categoryId: currentCategory?.id,
+          price: {
+            gte: Number(minPriceStr || 0),
+            lte: Number(maxPriceStr || 10000),
+          },
         },
         skip: (pageNum - 1) * 9,
         take: 9, // one page display nine products
@@ -96,6 +125,10 @@ export async function GET(
     const categoryProducts = await prismadb.product.findMany({
       where: {
         categoryId: currentCategory?.id,
+        price: {
+          gte: Number(minPriceStr || 0),
+          lte: Number(maxPriceStr || 10000),
+        },
       },
       skip: (pageNum - 1) * 9,
       take: 9, // one page display nine products
