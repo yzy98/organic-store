@@ -20,6 +20,7 @@ export async function GET(
     const orderStr = searchParams.get("order");
     const minPriceStr = searchParams.get("min_price");
     const maxPriceStr = searchParams.get("max_price");
+    const searchStr = searchParams.get("search_str");
 
     if (category === "everything") {
       // sort by date
@@ -33,6 +34,10 @@ export async function GET(
             price: {
               gte: Number(minPriceStr || 0),
               lte: Number(maxPriceStr || 10000),
+            },
+            title: {
+              contains: searchStr || "",
+              mode: "insensitive",
             },
           },
           skip: (pageNum - 1) * 9,
@@ -53,6 +58,10 @@ export async function GET(
               gte: Number(minPriceStr || 0),
               lte: Number(maxPriceStr || 10000),
             },
+            title: {
+              contains: searchStr || "",
+              mode: "insensitive",
+            },
           },
           skip: (pageNum - 1) * 9,
           take: 9, // one page display nine products
@@ -68,6 +77,10 @@ export async function GET(
           price: {
             gte: Number(minPriceStr || 0),
             lte: Number(maxPriceStr || 10000),
+          },
+          title: {
+            contains: searchStr || "",
+            mode: "insensitive",
           },
         },
       });
@@ -92,6 +105,10 @@ export async function GET(
             gte: Number(minPriceStr || 0),
             lte: Number(maxPriceStr || 10000),
           },
+          title: {
+            contains: searchStr || "",
+            mode: "insensitive",
+          },
         },
         skip: (pageNum - 1) * 9,
         take: 9, // one page display nine products
@@ -111,6 +128,10 @@ export async function GET(
             gte: Number(minPriceStr || 0),
             lte: Number(maxPriceStr || 10000),
           },
+          title: {
+            contains: searchStr || "",
+            mode: "insensitive",
+          },
         },
         skip: (pageNum - 1) * 9,
         take: 9, // one page display nine products
@@ -128,6 +149,10 @@ export async function GET(
         price: {
           gte: Number(minPriceStr || 0),
           lte: Number(maxPriceStr || 10000),
+        },
+        title: {
+          contains: searchStr || "",
+          mode: "insensitive",
         },
       },
       skip: (pageNum - 1) * 9,

@@ -8,6 +8,7 @@ interface useProductsParams {
   order?: string;
   minPrice?: number;
   maxPrice?: number;
+  searchStr?: string;
 }
 
 const useProducts = ({
@@ -17,6 +18,7 @@ const useProducts = ({
   order,
   minPrice,
   maxPrice,
+  searchStr,
 }: useProductsParams) => {
   const url = `/api/products/${category}?page=${page}`;
 
@@ -27,7 +29,12 @@ const useProducts = ({
   const maxPriceUrl = maxPrice ? `&max_price=${maxPrice}` : "";
   const priceUrl = minPriceUrl + maxPriceUrl;
 
-  const { data, error, isLoading } = useSWR(url + sortUrl + priceUrl, fetcher);
+  const searchUrl = searchStr ? `&search_str=${searchStr}` : "";
+
+  const { data, error, isLoading } = useSWR(
+    url + sortUrl + priceUrl + searchUrl,
+    fetcher
+  );
 
   return {
     data,

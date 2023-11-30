@@ -1,9 +1,12 @@
+import prismadb from "@/lib/prismadb";
+import ShopProvider from "@/providers/ShopProvider";
+
 import Pagination from "@/components/Pagination";
 import ProductCardContainer from "@/components/ProductCardContainer";
 import ProductFilterBar from "@/components/ProductFilterBar";
 import ProductSortBar from "@/components/ProductSortBar";
-import prismadb from "@/lib/prismadb";
-import ShopProvider from "@/providers/ShopProvider";
+import SearchBar from "@/components/SearchBar";
+import ProductTitle from "@/components/ProductTitle";
 
 interface ShopPageProps {
   params: {
@@ -44,7 +47,8 @@ const ShopPage = async ({ params }: ShopPageProps) => {
   return (
     <div className="flex flex-col gap-10 ml-5 h-[1200px] border-l border-gray-400 pl-[80px]">
       <ShopProvider>
-        <div>{params.category}</div>
+        <ProductTitle category={params.category} />
+        <SearchBar />
         <ProductFilterBar minValue={1} maxValue={100} />
         <ProductSortBar />
         <ProductCardContainer category={params.category} />
